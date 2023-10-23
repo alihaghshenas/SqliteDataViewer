@@ -1,0 +1,40 @@
+﻿@model List<List<string>>
+@{
+    ViewData["Title"] = "Tables Data";
+}
+
+<table class="table table-bordered">
+    @foreach(List<string> row in Model)
+    {
+        @if (Model.IndexOf(row) == 0)
+        {
+            <form asp-controller="Home" asp-action="GetTableData" method="get">
+                <input type="submit" class="btn-primary btn" value="اعمال"/>
+                <input class="btn-primary btn" name="DatabasePath" value="@ViewContext.HttpContext.Request.Query["DatabasePath"]" hidden readonly/>
+                <input class="btn-primary btn" name="tableName" value="@ViewContext.HttpContext.Request.Query["tableName"]" hidden readonly/>
+                <thead class="table-dark">
+                    <tr>
+                        @foreach (string column in row)
+                        {
+                            <td class="col" ><input class="input col" name="@column" placeholder="search..."/></td>
+                        }
+                    </tr> 
+                    <tr>
+                        @foreach (string column in row)
+                        {
+                            <td class="col">@column</td>
+                        }
+                    </tr> 
+                </thead>
+            </form>
+        }else
+        {
+           <tr>
+                @foreach (string column in row)
+                {
+                    <td class="col">@column</td>
+                }
+            </tr> 
+        }
+    }
+</table>

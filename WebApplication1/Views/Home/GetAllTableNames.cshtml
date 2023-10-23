@@ -1,0 +1,53 @@
+﻿@model List<List<string>>
+@{
+    ViewData["Title"] = "All Tables";
+}
+
+@for(int x=0; x< @ViewBag.DatabasesDirectories.Length;x++)
+{
+    <a asp-route-DatabasePath="@ViewBag.DatabasesDirectories[x]" class="btn btn-success">@ViewBag.DatabasesNames[x]</a>
+}
+<br>
+<br>
+
+
+
+<table class="table table-bordered">
+    
+    @foreach(List<string> row in Model)
+    {
+        @if (Model.IndexOf(row) == 0)
+        {
+            <thead class="table-dark">
+                <tr>
+                    <form autocomplete= asp-controller="Home" asp-action="RunCustomQuery" method="get">
+                        <td class="col">
+                            <div class="input-group mb-3 autocomplete">
+                                <input class="input" name="query" id="QueryText" placeholder="SELECT * FROM ..." style="width:95%;"/>
+                                <div class="input-group-append">
+                                    <input type="submit" class="btn-primary btn" value="اعمال"/>
+                                </div>
+                            </div>
+                        </td>
+                        <input class="btn-primary btn" name="DatabasePath" value="@ViewBag.CurrentDataBase" hidden readonly/>
+                        
+                    </form>
+                </tr>
+                <tr>
+                    @foreach (string column in row)
+                    {
+                        <td class="col">@column</td>
+                    }
+                </tr> 
+            </thead>
+        }else
+        {
+           <tr>
+                @foreach (string column in row)
+                {
+                    <td class="col"><a asp-action="GetTableData" asp-route-tableName="@column" asp-route-DatabasePath="@ViewBag.CurrentDataBase" >@column</a></td>
+                }
+            </tr> 
+        }
+    }
+</table>
